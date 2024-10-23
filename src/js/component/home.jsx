@@ -1,16 +1,15 @@
 import React from "react";
+import SecondsCounter from "./SecondsCounter";
 
-//include images into your bundle
-
-import Seconds from "./Seconds";
 
 //create your first component
 const Home = () => {
 	return (
 		<div className="text-center">
-		<Seconds />	
+		
+		<SecondsCounter />	
 		</div>
-	);
-};
-
+  )
+}
 export default Home;
+
