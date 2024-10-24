@@ -26,7 +26,6 @@ function SecondsCounter() {
         count += 1;
       }
       updateDisplay();
-// alerta cuando el contador llegue acero
    if(isCountingDown && count === 0){
     clearInterval(interval);//detenemos el contador
     alert('¡El tiempo ha terminado!');
@@ -44,22 +43,22 @@ function SecondsCounter() {
     const inputVal = parseInt(inputValue, 10);
     if(!isNaN(inputVal)) {
       count = inputVal;
-      isCountingDown = true;
+      isCountingDown = false;
       updateDisplay();
       startInterval();
+     
      
     }
    };
 
    // funcion reset               esta funcion detiene el intervalo activo,reinicia count acero y
-   //                              y cambia  isCountingDown a false  ademas actualiza el display a 0000 y comienza a contar de nuevo
    const reset = () => {       //  de forma acendente
     clearInterval(interval);
     count = 0;
     isCountingDown = false;
     updateDisplay();
     startInterval();
- 
+   
    };
 
    // funcion handleInputChange          esta funcion se llama cada vez que hay cambios en el input,actulizando inputvalue
