@@ -29,6 +29,7 @@ function SecondsCounter() {
    if(isCountingDown && count === 0){
     clearInterval(interval);//detenemos el contador
     alert('¡El tiempo ha terminado!');
+    inputValue = '';
     count = 0;
     updateDisplay();
    }
@@ -94,8 +95,10 @@ function SecondsCounter() {
     >
       000000
     </div>
+    
     <input
       type="number"
+     
       placeholder="Número inicial"
       onChange={handleInputChange} // Actualizar valor del input
       className="input-countdown"
@@ -109,6 +112,7 @@ function SecondsCounter() {
     <button onClick={toggleCountdown} className="button">
       Cuenta Regresiva
     </button>
+    
   </div>
     
   );
