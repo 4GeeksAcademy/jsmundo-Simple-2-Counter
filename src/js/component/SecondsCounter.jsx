@@ -1,124 +1,118 @@
 import React from 'react';
 
-
-// este es el componente que se renderiza en la interfaz
 function SecondsCounter() {
- let count = 0; // almacena el valor actual del contador
- let isCountingDown = false; //un booleano que indica si el contador esta en cuenta regresiva
- let inputValue = ''; // almacena el valor ingresado en el campo de entrada
- let interval = null; // referecia al temporizador que se establece mediante setinterval
- let displayElement = null; // usado para referirse al elemento dom donde se mostrata el contador
+  let count = 0; // Almacena el valor actual del contador
+  let isCountingDown = false; // Booleano para indicar si está en cuenta regresiva
+  let inputValue = ''; // Valor ingresado en el campo de entrada
+  let interval = null; // Referencia al temporizador de setInterval
+  let displayElement = null; // Referencia al elemento de display
+  let inputElement = null; // Referencia directa al elemento de entrada
 
+  // Función que actualiza el display
+  const updateDisplay = () => {
+    if (displayElement) {
+      displayElement.textContent = String(count).padStart(6, '0'); // Asegura siempre 6 dígitos en el contador
+    }
+  };
 
- // funcion  updateDisplay
- const updateDisplay = () => { // esta funcion actualiza el contenido'displayElement' con el valor actual de count
-  if(displayElement) {     // asegurando que siempre tengamos 6 digitos
-    displayElement.textContent = String(count).padStart(6, '0');
-  }
- };
-    // funcion startInterval      
-   const startInterval = () => {//esta funcion inicia o reinicia el intervalo que actualiza el cntador cada segundo
-    if(interval) clearInterval (interval);// y dependiendo del valor de isCountingDown,el contador se ingrementa o se decremente
-    interval = setInterval(()=>{// llamando a updateDisplay para mostrar el nuevo valor en pantalla
-      if(isCountingDown && count > 0) {
+  // Función para iniciar el intervalo
+  const startInterval = () => {
+    if (interval) clearInterval(interval); // Limpia cualquier intervalo previo
+    interval = setInterval(() => {
+      if (isCountingDown && count > 0) {
         count -= 1;
-      }else{
+      } else {
         count += 1;
       }
       updateDisplay();
-   if(isCountingDown && count === 0){
-    clearInterval(interval);//detenemos el contador
-    alert('¡El tiempo ha terminado!');
-    inputValue = '';
-    count = 0;
-    updateDisplay();
-   }
 
+      if (isCountingDown && count === 0) {
+        clearInterval(interval); // Detenemos el contador
+        alert('¡El tiempo ha terminado!');
+        inputElement.value = ''; // Limpia el input cuando termina
+        count = 0;
+        updateDisplay();
+      }
     }, 1000);
+  };
 
-   };
-
-   // funcion startCountdow          esta funcion detiene cualquier intervalo previo y convierte el valor del input en un numero
-   const startCountdown = () => {    // si el valor es valido establece el contador count a este valor y cambia el modo a ascendente  isCountingDown = false;
-    clearInterval(interval);         //ademas actualiza el display y comienza el intervalo
+  // Función para iniciar la cuenta
+  const startCountdown = () => {
+    clearInterval(interval); // Detenemos cualquier intervalo previo
     const inputVal = parseInt(inputValue, 10);
-    if(!isNaN(inputVal)) {
+    if (!isNaN(inputVal)) {
       count = inputVal;
       isCountingDown = false;
       updateDisplay();
       startInterval();
-     
-     
+      inputElement.value = ''; // Limpia el campo de entrada después de iniciar
     }
-   };
+  };
 
-   // funcion reset               esta funcion detiene el intervalo activo,reinicia count acero y
-   const reset = () => {       //  de forma acendente
+  // Función para reiniciar
+  const reset = () => {
     clearInterval(interval);
     count = 0;
     isCountingDown = false;
     updateDisplay();
     startInterval();
-   
-   };
+  };
 
-   // funcion handleInputChange          esta funcion se llama cada vez que hay cambios en el input,actulizando inputvalue
-   const handleInputChange = (e) =>{   // con el nuevo valor ingresado por el usuario
+  // Función para capturar el valor del input
+  const handleInputChange = (e) => {
     inputValue = e.target.value;
-   };
+  };
 
-   // funcion toggleCountdown                 esta funcion de tiene cual quier intervalo previo, convierte el del input a un nuemero
-      const toggleCountdown = () =>{      // y si es valido establese este valor en el count, cambiando isCountingDown a true
-        clearInterval(interval);           //para activar el modo de cuenta
-        const inputVal = parseInt(inputValue, 10);
-        if(!isNaN(inputVal)){
-          count = inputVal;
-          isCountingDown = true;
-          updateDisplay();
-          startInterval();
-         
-        }
-      };
-       
-      window.onload = () => {
-        startInterval();
-      }
+  // Función para activar la cuenta regresiva
+  const toggleCountdown = () => {
+    clearInterval(interval);
+    const inputVal = parseInt(inputValue, 10);
+    if (!isNaN(inputVal)) {
+      count = inputVal;
+      isCountingDown = true;
+      updateDisplay();
+      startInterval();
+      inputElement.value = ''; // Limpia el campo de entrada después de activar cuenta regresiva
+    }
+  };
 
+  // Inicia el temporizador al cargar la página
+  window.onload = () => {
+    startInterval();
+  };
 
   return (
-    
     <div className="counter-container">
-    <span className="clock-icon">🕒</span>
-    <div
-      className="counter"
-      ref={(el) => (displayElement = el)} // Referencia al display
-    >
-      000000
+      <span className="clock-icon">🕒</span>
+      <div
+        className="counter"
+        ref={(el) => (displayElement = el)} // Referencia directa al display
+      >
+        000000
+      </div>
+
+      <input
+        type="number"
+        placeholder="Número inicial"
+        onChange={handleInputChange} // Captura del input
+        ref={(el) => (inputElement = el)} // Asigna inputElement directamente
+        className="input-countdown"
+      />
+      <button onClick={startCountdown} className="reset-buttton">
+        Iniciar
+      </button>
+      <button onClick={reset} className="reset-buttton">
+        Reiniciar
+      </button>
+      <button onClick={toggleCountdown} className="button">
+        Cuenta Regresiva
+      </button>
     </div>
-    
-    <input
-      type="number"
-     
-      placeholder="Número inicial"
-      onChange={handleInputChange} // Actualizar valor del input
-      className="input-countdown"
-    />
-    <button onClick={startCountdown} className="reset-buttton">
-      Iniciar
-    </button>
-    <button onClick={reset} className="reset-buttton">
-      Reiniciar
-    </button>
-    <button onClick={toggleCountdown} className="button">
-      Cuenta Regresiva
-    </button>
-    
-  </div>
-    
   );
 }
 
 export default SecondsCounter;
+
 
 
 
